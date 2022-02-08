@@ -9,38 +9,26 @@ from tensorflow.keras import layers, Model
 from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.applications.resnet50 import ResNet50
 
-from data_generator import prepare_dataset_for_binary_classification, DataGenerator
-
-class Network:
-
-    def __init__(self, input_shape=(90, 335, 3)):
-        self.input_shape = input_shape
-        self.model = self.build_model()
-        self.model.summary()
+from data_preparation import prepare_dataset_for_binary_classification, DataGenerator
       
-    def build_model(self, trainable=False):
+def build_model(input_shape):
 
-        resNet_model = ResNet50(include_top=False, weights='imagenet', input_shape=self.input_shape)
-        resNet_model.trainable = trainable
+    resNet_model = ResNet50(include_top=False, weights='imagenet', input_shape=input_shape)
+    resNet_model.trainable = False
 
-        input_image = layers.Input(self.input_shape)
-        x = resNet_model(input_image, training=False)
-        # x = layers.MaxPool2D()(x)
-        x = layers.Flatten()(x)
-        x = layers.Dropout(rate=0.3)(x)
-        x = layers.Dense(1000, activation='relu',  kernel_initializer='he_normal')(x)
-        x = layers.Dropout(rate=0.3)(x)
-        # x = layers.Dense(500, activation='relu',  kernel_initializer='he_normal')(x)
-        # x = layers.Dropout(rate=0.3)(x)
-        x = layers.Dense(500, activation='relu',  kernel_initializer='he_normal')(x)
-        output = layers.Dense(1, activation='sigmoid')(x)
+    input_image = layers.Input(input_shape)
+    x = resNet_model(input_image, training=False)
+    x = layers.Flatten()(x)
+    x = layers.Dropout(rate=0.3)(x)
+    x = layers.Dense(1000, activation='relu',  kernel_initializer='he_normal')(x)
+    x = layers.Dropout(rate=0.3)(x)
+    x = layers.Dense(500, activation='relu',  kernel_initializer='he_normal')(x)
+    output = layers.Dense(1, activation='sigmoid')(x)
 
-        model = Model(inputs=[input_image], outputs=[output])
+    model = Model(inputs=[input_image], outputs=[output])
 
-        return model
+    return model
 
-    def getModel(self):
-      return self.model
         
 def createGenerators(target_image_size, val_size=0.2):
     ## set seeds for consistancy
@@ -92,7 +80,7 @@ def createGenerators(target_image_size, val_size=0.2):
 def main(train):
     target_image_size = (90, 335)
     input_shape = (target_image_size[0], target_image_size[1], 3)
-    model = Network(input_shape).getModel()
+    model = build_model(input_shape)
     
     trainGen, valGen, testGen, train_class_ratio = createGenerators(target_image_size)
 
@@ -120,8 +108,9 @@ def main(train):
 
     else:
         model.load_weights('./weights/model1.h5')
-        model.evaluate(valGen)
-        model.evaluate(testGen)
+        train_history = model.evaluate(trainGen)
+        val_history = model.evaluate(valGen)
+        test_historymodel.evaluate(testGen)
 
 
 if __name__ == "__main__":
