@@ -108,6 +108,8 @@ def main(train):
 
     else:
         model.load_weights('./weights/model1.h5')
+        
+        print('evaluating...')
 
         train_history = model.evaluate(trainGen, verbose=0)
         val_history = model.evaluate(valGen, verbose=0)
