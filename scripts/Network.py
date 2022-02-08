@@ -108,10 +108,14 @@ def main(train):
 
     else:
         model.load_weights('./weights/model1.h5')
-        train_history = model.evaluate(trainGen)
-        val_history = model.evaluate(valGen)
-        test_historymodel.evaluate(testGen)
 
+        train_history = model.evaluate(trainGen, verbose=0)
+        val_history = model.evaluate(valGen, verbose=0)
+        test_history = model.evaluate(testGen, verbose=0)
+
+        print('accuracy on the train set: {:.4f}'.format(train_history[1]))
+        print('accuracy on the validation set: {:.4f}'.format(val_history[1]))
+        print('accuracy on the test set: {:.4f}'.format(test_history[1]))
 
 if __name__ == "__main__":
     main(train=False)
