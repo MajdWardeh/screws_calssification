@@ -1,0 +1,5 @@
+numpy
+Pillow
+opencv-python
+scikit-learn
+tensorflow==2.3
