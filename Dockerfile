@@ -1,11 +1,22 @@
 FROM python:3.7
 
-COPY requirements.txt .
+RUN apt-get update
+RUN apt-get install ffmpeg libsm6 libxext6  -y
 
-RUN pip install --upgrade pip
+# RUN adduser --disabled-password majd
+RUN useradd -ms /bin/bash majd
+USER majd
+
+RUN mkdir /home/majd/screws_classification
+
+WORKDIR /home/majd/screws_classification
+
+COPY requirements.txt requirements.txt
+
 RUN pip install --user -r requirements.txt
 
-COPY Network.py .
-COPY data_generator.py .
+COPY scripts scripts
 
-CMD [ "python", "./Network.py" ]
+RUN mkdir weights screws_set 
+
+CMD [ "python", "scripts/Network.py" ]
