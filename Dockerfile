@@ -17,6 +17,6 @@ RUN pip install --user -r requirements.txt
 
 COPY scripts scripts
 
-RUN mkdir weights screws_set 
+WORKDIR /home/majd/screws_classification/scripts
 
-CMD [ "python", "scripts/Network.py" ]
+CMD [ "python", "scripts/classifier.py" ]

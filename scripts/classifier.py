@@ -16,8 +16,8 @@ from data_preparation import prepare_dataset_for_binary_classification, DataGene
 class Classifier:
     def __init__(self, weights=None):
         self.target_image_size = (90, 335)
-        self.model = self.__build_model()
         self.weights_updated = False
+        self.model = self.__build_model()
         if not weights is None:
             self.__weights_check_and_load(weights)
         
