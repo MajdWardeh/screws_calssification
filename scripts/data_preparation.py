@@ -161,7 +161,7 @@ def prepare_dataset_for_binary_classification(class1_dir, class2_dir, split=True
 
 
 def main():
-    base_dir = './screws_set/train'
+    base_dir = '/home/majd/screws_classification/screws_set/train'
     class1_dir = os.path.join(base_dir, '1')
     class2_dir = os.path.join(base_dir, '2')
 

@@ -3,7 +3,6 @@ FROM python:3.7
 RUN apt-get update
 RUN apt-get install ffmpeg libsm6 libxext6  -y
 
-# RUN adduser --disabled-password majd
 RUN useradd -ms /bin/bash majd
 USER majd
 
@@ -19,4 +18,4 @@ COPY scripts scripts
 
 WORKDIR /home/majd/screws_classification/scripts
 
-CMD [ "python", "scripts/classifier.py" ]
+CMD [ "python", "classifier.py" ]

@@ -16,8 +16,10 @@ from data_preparation import prepare_dataset_for_binary_classification, DataGene
 class Classifier:
     def __init__(self, weights=None):
         self.target_image_size = (90, 335)
-        self.weights_updated = False
+        self.weights_updated = False if weights is None else True
+
         self.model = self.__build_model()
+
         if not weights is None:
             self.__weights_check_and_load(weights)
         
@@ -59,11 +61,11 @@ class Classifier:
         random.seed = 0
         np.random.seed = 0
 
-        train_base_dir = './screws_set/train'
+        train_base_dir = '/home/majd/screws_classification/screws_set/train'
         class1_train_dir = os.path.join(train_base_dir, '1')
         class2_train_dir = os.path.join(train_base_dir, '2')
 
-        test_base_dir = './screws_set/test'
+        test_base_dir = '/home/majd/screws_classification/screws_set/test'
         class1_test_dir = os.path.join(test_base_dir, '1')
         class2_test_dir = os.path.join(test_base_dir, '2')
 
@@ -87,9 +89,9 @@ class Classifier:
         }
         test_config = val_config
 
-        train_batch_size = 64
-        val_batch_size = 64
-        test_batch_size = 64
+        train_batch_size = 32
+        val_batch_size = 32
+        test_batch_size = 32
 
         X_train, y_train, X_val, y_val, train_classes_ratio = prepare_dataset_for_binary_classification(class1_train_dir, class2_train_dir, split=True, test_size=val_size)
         X_test, y_test, test_classes_ratio = prepare_dataset_for_binary_classification(class1_test_dir, class2_test_dir, split=False)
@@ -156,14 +158,18 @@ class Classifier:
                 img_idx += 1
         return predicted_classes_dict
 
+def train():
+    classifier = Classifier()
+    classifier.train('/home/majd/screws_classification/weights')
+
+def evaluate():
+    weights = '/home/majd/screws_classification/weights/model1.h5'
+    classifier = Classifier(weights) # give it the pre-trained weights so it won't download imagenet weights
+    classifier.evaluate()
 
 def main():
-    classifier = Classifier()
-    # classifier.train()
-    classifier.evaluate('./weights/model1.h5')
-    in_dir = "/home/majd/Documents/jobs/logivations/screws_classification/example_directory_structure/input"
-    predicted_classes_dict = classifier.classify(in_dir)
-    print(predicted_classes_dict)
+    # train()
+    evaluate()
 
 if __name__ == "__main__":
     main()
