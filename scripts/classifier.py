@@ -103,7 +103,7 @@ class Classifier:
         return trainGen, valGen, testGen, train_classes_ratio
 
     def train(self, save_weights_dir='./weights'):
-        Path(save_weights_dir).mkdir(parents=True, exists_ok=True)
+        Path(save_weights_dir).mkdir(parents=True, exist_ok=True)
 
         history = self.model.fit(x=self.trainGen,
                             epochs=3000,
