@@ -2,6 +2,7 @@ weights/
 screws_set/
 example_directory_structure/
 CVML_take_home_task.docx
+.vscode/
   
 # Byte-compiled / optimized / DLL files
 __pycache__/

@@ -1,6 +1,5 @@
 import sys
 import os
-import warnings
 
 import math
 import numpy as np
@@ -46,9 +45,6 @@ class DataGenerator(Sequence):
         self.fill_mode = config.get('fill_mode', 'nearest')
         self.resize_fill_mode = config.get('resize_fill_mode', 'nearest')
 
-        if self.random_brightness_shift == True:
-            warnings.warn('random_brightness_shift is TRUE, with std={}'.format(self.brightness_shift_std)) 
-
     def __len__(self):
         return math.ceil(len(self.x_set) / self.batch_size)
 
@@ -85,7 +81,6 @@ class DataGenerator(Sequence):
         for row in range(min(self.batch_size, len(self.x_set)-index*self.batch_size)):
             image_name = self.x_set[index*self.batch_size + row]
             x = np.array(Image.open(image_name)) # color channels order is RGB
-            y = self.y_set[index*self.batch_size + row]
 
 
             ## resizing:
@@ -116,12 +111,17 @@ class DataGenerator(Sequence):
                 x = np.array(img_enhanced)
 
             X_batch.append(x)
-            y_batch.append(y)
+            if not self.y_set is None:
+                y = self.y_set[index*self.batch_size + row]
+                y_batch.append(y)
 
         X_batch = np.array(X_batch).astype(np.float32)/255.0
-        y_batch = np.array(y_batch).astype(np.float32)
+        if self.y_set is None:
+            return X_batch
+        else:
+            y_batch = np.array(y_batch).astype(np.float32)
+            return (X_batch, y_batch)
 
-        return (X_batch, y_batch)
 
 def prepare_dataset_for_binary_classification(class1_dir, class2_dir, split=True, test_size=0.2, random_state=42):
     
