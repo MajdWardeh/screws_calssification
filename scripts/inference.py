@@ -1,6 +1,8 @@
 import os
 from pathlib import Path
+import shutil
 from optparse import OptionParser
+
 
 from classifier import Classifier
 
@@ -12,7 +14,7 @@ def process_args():
                         help="The path to the directory which contains screw images that needs to be classified")
     parser.add_option("--output_dir", dest="output_dir",
                         help="The path to the directory which the classified images will be moved to one of its subdirectories")
-    parser.add_option("--weights", dest="weights", default='./weights/model1.h5',
+    parser.add_option("--weights", dest="weights", default='/home/majd/screws_classification/weights/model1.h5',
                         help="optional, a weights for the classifier model")
 
     (options, args) = parser.parse_args()
@@ -35,7 +37,7 @@ def main():
     for img_name, pred_class in predicted_classes_dict.items():
         from_path = os.path.join(in_dir, img_name)
         to_path = os.path.join(out_dir, pred_class, img_name)
-        os.replace(from_path, to_path)
+        shutil.move(from_path, to_path)
 
     print('finished')
 

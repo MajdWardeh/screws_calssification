@@ -17,20 +17,9 @@ class Classifier:
     def __init__(self, weights=None):
         self.target_image_size = (90, 335)
         self.weights_updated = False if weights is None else True
-
         self.model = self.__build_model()
-
         if not weights is None:
             self.__weights_check_and_load(weights)
-        
-        self.trainGen, self.valGen, self.testGen, self.train_class_ratio = self.__createGenerators()
-
-        ## accounting for the implance in the number of samples of each class
-        self.train_class_weights = {
-            0: self.train_class_ratio[1],
-            1: self.train_class_ratio[0]
-        }
-
         self.model.compile(
                     optimizer= Adam(), 
                     loss='binary_crossentropy', 
@@ -105,6 +94,14 @@ class Classifier:
     def train(self, save_weights_dir='./weights'):
         Path(save_weights_dir).mkdir(parents=True, exist_ok=True)
 
+        self.trainGen, self.valGen, self.testGen, self.train_class_ratio = self.__createGenerators()
+
+        ## accounting for the implance in the number of samples of each class
+        self.train_class_weights = {
+            0: self.train_class_ratio[1],
+            1: self.train_class_ratio[0]
+        }
+
         history = self.model.fit(x=self.trainGen,
                             epochs=3000,
                             validation_data=self.valGen,
@@ -125,6 +122,8 @@ class Classifier:
 
     def evaluate(self, weights=None):
         self.__weights_check_and_load(weights)
+
+        self.trainGen, self.valGen, self.testGen, self.train_class_ratio = self.__createGenerators()
 
         print('evaluating...')
 

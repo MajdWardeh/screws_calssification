@@ -9,5 +9,5 @@ container_weights=$container_base/weights
 host_screws_set=$host_base/screws_set
 container_screws_set=$container_base/screws_set
 
-sudo docker run -v $host_weights:$container_weights -v $host_screws_set:$container_screws_set -it myimage bash
+docker run -v $host_weights:$container_weights -v $host_screws_set:$container_screws_set -it myimage bash
 
