@@ -135,8 +135,9 @@ class Classifier:
         print('accuracy on the validation set: {:.4f}'.format(val_history[1]))
         print('accuracy on the test set: {:.4f}'.format(test_history[1]))
 
-    def classify(self, images_dir, weights):
-        self.model.load_weights(weights)
+    def classify(self, images_dir, weights=None):
+        if weights is not None:
+            self.model.load_weights(weights)
 
         image_names_list = os.listdir(images_dir)
         image_paths_list = [os.path.join(images_dir, img)
