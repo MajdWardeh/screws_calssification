@@ -48,7 +48,7 @@ class Classifier:
         input_shape = (self.target_image_size[0], self.target_image_size[1], 3)
 
         # avoid downloading imagenet's weights if weights were provided
-        weights = 'imagenet' if self.pretrained_weights_path is not None else None
+        weights = 'imagenet' if self.pretrained_weights_path is None else None
 
         resNet_model = ResNet50(
             include_top=False, weights=weights, input_shape=input_shape)

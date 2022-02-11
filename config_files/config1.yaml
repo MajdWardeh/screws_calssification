@@ -1,6 +1,6 @@
-train_data_path: /home/majd/screws_classification/screws_set/train 
-test_data_path: /home/majd/screws_classification/screws_set/test
-pretrained_weights_path: /home/majd/screws_classification/weights/model1.h5
+train_data_path: /screws_classification/screws_set/train 
+test_data_path: /screws_classification/screws_set/test
+pretrained_weights_path: /screws_classification/weights/model1.h5
 
 target_image_size: [90, 335]
 label_map: ['1', '2']
@@ -8,7 +8,7 @@ label_map: ['1', '2']
 # training:
 val_ratio: 0.2
 train_epochs: 3000
-save_weights_dir: /home/majd/screws_classification/weights
+save_weights_dir: /screws_classification/weights
 evaluate_after_training: True
 
 # data generators configs:
