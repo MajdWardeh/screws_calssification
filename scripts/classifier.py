@@ -19,8 +19,8 @@ class Classifier:
             loss='binary_crossentropy',
             metrics=['binary_accuracy'],
         )
-        if self.weights_path is not None:
-            self.model.load_weights(self.weights_path)
+        if self.pretrained_weights_path is not None:
+            self.model.load_weights(self.pretrained_weights_path)
             print('pretrained weights were loaded')
 
     def __load_configurations(self, config_path):
@@ -40,14 +40,14 @@ class Classifier:
         self.save_weights_dir = config['save_weights_dir']
         self.evaluate_after_training = config['evaluate_after_training']
 
-        self.weights_path = config.get('weights_path', None)
+        self.pretrained_weights_path = config.get('pretrained_weights_path', None)
         self.classification_threshold = config['classification_threshold']
 
     def __build_model(self):
         input_shape = (self.target_image_size[0], self.target_image_size[1], 3)
 
         # avoid downloading imagenet's weights if weights were provided
-        weights = 'imagenet' if self.weights_path is not None else None
+        weights = 'imagenet' if self.pretrained_weights_path is not None else None
 
         resNet_model = ResNet50(
             include_top=False, weights=weights, input_shape=input_shape)
