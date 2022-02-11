@@ -28,20 +28,21 @@ class Classifier:
         self.target_image_size = config['target_image_size']
         self.label_map = config['label_map']
 
-        self.train_data_path = config['train_data_path']
-        self.test_data_path = config['test_data_path']
-        self.val_ratio = config['val_ratio']
+        self.train_data_path = config.get('train_data_path', None)
+        self.test_data_path = config.get('test_data_path', None)
+        self.val_ratio = config.get('val_ratio', 0)
 
-        self.train_generator_config = config['train_generator_config']
-        self.val_generator_config = config['val_generator_config']
-        self.test_generator_config = config['test_generator_config']
+        self.train_generator_config = config.get('train_generator_config', None)
+        self.val_generator_config = config.get('val_generator_config', None)
+        self.test_generator_config = config.get('test_generator_config')
+        self.inference_generator_config = config.get('inference_generator_config', None)
 
-        self.train_epochs = config['train_epochs']
-        self.save_weights_dir = config['save_weights_dir']
-        self.evaluate_after_training = config['evaluate_after_training']
+        self.train_epochs = config.get('train_epochs', None)
+        self.save_weights_dir = config.get('save_weights_dir', None)
+        self.evaluate_after_training = config.get('evaluate_after_training', None)
 
         self.pretrained_weights_path = config.get('pretrained_weights_path', None)
-        self.classification_threshold = config['classification_threshold']
+        self.classification_threshold = config.get('classification_threshold', 0.5)
 
     def __build_model(self):
         input_shape = (self.target_image_size[0], self.target_image_size[1], 3)
@@ -142,12 +143,8 @@ class Classifier:
         image_names_list = os.listdir(images_dir)
         image_paths_list = [os.path.join(images_dir, img)
                             for img in image_names_list]
-        config = {
-            'target_image_size': self.target_image_size,
-            'resize_fill_mode': 'nearest',
-        }
-        batch_size = 32
-        gen = DataGenerator(image_paths_list, None, batch_size, config)
+
+        gen = DataGenerator(image_paths_list, None, self.inference_generator_config)
 
         predicted_classes_dict = {}
         img_idx = 0
