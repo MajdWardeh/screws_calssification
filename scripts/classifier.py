@@ -21,6 +21,7 @@ class Classifier:
         )
         if self.weights_path is not None:
             self.model.load_weights(self.weights_path)
+            print('pretrained weights were loaded')
 
     def __load_configurations(self, config_path):
         config = load_config_file(config_path)
